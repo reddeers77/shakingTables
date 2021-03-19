@@ -31,12 +31,18 @@ def get_image(image_path):
 def RGB2HEX(color):
     
     return "#{:02x}{:02x}{:02x}".format(int(color[0]), int(color[1]), int(color[2]))
-
+conc = []
+gang = []
 # CLUSTERING 
 def get_colors(image, cluster_numbers):
     
     km = KMeans(n_clusters=cluster_numbers)
-    colors = km.fit_predict(image)    
+    colors = km.fit_predict(image)  
+    for i in colors:
+        if i == 0:
+            conc.append(i)
+        else:
+            gang.append(i)
     counts = Counter(colors)
     center_colors = km.cluster_centers_
     ordered_colors = [center_colors[i] for i in counts.keys()]
