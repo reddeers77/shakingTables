@@ -24,6 +24,13 @@ class shakingTable():
         self.mid_size = 30
         self.data_size = 100
     
+    def info(self):
+        print("Concentration color: "+str(self.conc))
+        print("Middling color: "+str(self.mid))
+        print("Gangue color: "+str(self.gang))
+        print("Concentration color: "+str(self.conc))
+        print("Concentration Size: "+str(self.conc_size))
+        print("Middling Size: "+str(self.mid_size))
 
 
     def createData(self):
