@@ -17,13 +17,13 @@ class shakingTable():
 
 
     def __init__(self, conc, mid, gang, conc_size, mid_size, data_size):
-        self.conc = [10,9,9]
-        self.mid = [74,49,49]
-        self.gang = [136,106,105]
-        self.conc_size = 20
-        self.mid_size = 30
-        self.data_size = 100
-    
+        self.conc = conc
+        self.mid = mid
+        self.gang = gang
+        self.conc_size = conc_size
+        self.mid_size = mid_size
+        self.data_size = data_size
+        
     def info(self):
         print("Concentration color: "+str(self.conc))
         print("Middling color: "+str(self.mid))
@@ -31,19 +31,38 @@ class shakingTable():
         print("Concentration color: "+str(self.conc))
         print("Concentration Size: "+str(self.conc_size))
         print("Middling Size: "+str(self.mid_size))
-
-
+        
     def createData(self):
-        data = []
-        for c in range( 1, conc_size+1 ) :    
-            for m in range( 0, mid_size+1 ):
-                frames = [gang]*100
+        self.data = []
+        for c in range( 1, self.conc_size+1 ) :    
+            for m in range( 0, self.mid_size+1 ):
+                frames = [self.gang]*100
                 frames = np.array(frames)        
-                frames[:c,] = conc
-                frames[c:c+m,] = mid        
-                data.append(frames)
-        return data
-
+                frames[:c,] = self.conc
+                frames[c:c+m,] = self.mid        
+                self.data.append(frames)
+        return self.data
+    
+    def sliderPoints(self):
+        points = []
+        for c in range (1, self.conc_size+1):
+            for m in range (0, self.mid_size+1):
+                new_point = [c,(c+m)]
+                if ( c == (c+m)):
+                    new_point = [c,0]
+                                   
+                points.append(new_point)
+        return points
+    
+    def ratios(self):
+        c_perc =(self.conc_size/self.data_size)*100
+        m_perc = (self.mid_size/self.data_size)*100
+        g_perc = ((self.data_size-(c_perc+m_perc))/self.data_size)*100
+        
+        print("Concentration percentage : % "+str(c_perc))
+        print("Middling percentage : % "+str(m_perc))
+        print("Gangue percentage : % "+str(g_perc))
+        return c_perc, m_perc, g_perc
 
 ####################    PLOT DATA    ####################
 
@@ -103,18 +122,23 @@ def loadData(path):
                 l = []
     return frames    
 
-    
-path = ".../dataPrep"
+   
+path = "..../dataPrep"
 conc = [10,9,9]
 mid = [74,49,49]
 gang = [136,106,105]
 
 data_size = 100
-conc_size = 3
-mid_size = 2
+conc_size = 10
+mid_size = 5
 
-new = shakingTable(conc,mid,gang,conc_size,mid_size,data_size)
-cccc = new.createData()
-saveData(path,cccc)
-a = loadData(path)
-showData(a)
+table1 = shakingTable(conc,mid,gang,conc_size,mid_size,data_size) # Create a new shakingTable Object
+table1.info() # Shows infos about table flow                                        
+table1.ratios() # Show flows ratios
+table_pictures = table1.createData() # Create RGB values of the each flows
+points = table1.sliderPoints() # Shows the corresponding values of slider points of each flow times
+
+saveData(path,table_pictures) # Saves data to defined path file and name as .csv file
+loaded_pictures = loadData(path) # Load data from saves .csv file
+showData(loaded_pictures) # shows each flow times in pylot graph 
+
